@@ -1,3 +1,7 @@
-- name: Cisco | Ping test
-  cisco.ios.ios_ping:
-    dest: 10.1.255.1
+---
+- name: Cisco
+  hosts: all
+  tasks:
+    - name: Cisco | Get ping response
+      cisco.ios.ios_ping:
+        dest: 10.1.255.1
