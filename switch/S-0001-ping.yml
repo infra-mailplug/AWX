@@ -1,4 +1,8 @@
-- name: Cisco | Get ping response
-  cisco.ios.ios_ping:
-    dest: 10.1.255.1
-  when: "'swt' not in group_names"
+---
+- name: Cisco
+  hosts: Switch
+  tasks:
+    - name: Cisco | Get ping response
+      cisco.ios.ios_ping:
+        dest: 10.1.255.1
+      when: "'swt' not in group_names"
