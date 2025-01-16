@@ -2,6 +2,13 @@
 - name: Cisco
   hosts: switch
   tasks:
+    - name: Display group names
+      debug:
+        msg: "{{ group_names }}"
+    - name: Display all groups and their hosts
+      debug:
+        var: groups
+        
     - name: Cisco | Get ping response
       cisco.ios.ios_ping:
         dest: 10.1.255.1
