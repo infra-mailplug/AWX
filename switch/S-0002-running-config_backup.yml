@@ -2,33 +2,33 @@
 - name: Hello World Sample
   hosts: all
   tasks:
-- name: Cisco Switch | Create directory
-  ansible.builtin.file:
-    path: "/data/config/{{ inventory_hostname }}"
-    owner: nobody
-    group: nogroup
-    mode: '0755'
-    state: directory
-  delegate_to: swt
-
-- name: Cisco Switch | Get ansible date/time facts
-  ansible.builtin.setup:
+    - name: Cisco Switch | Create directory
+      ansible.builtin.file:
+        path: "/data/config/{{ inventory_hostname }}"
+        owner: nobody
+        group: nogroup
+        mode: '0755'
+        state: directory
+      delegate_to: swt
+    
+    - name: Cisco Switch | Get ansible date/time facts
+      ansible.builtin.setup:
     filter: "ansible_date_time"
     gather_subset: "!all"
-  delegate_to: swt
-  run_once: true
-
-- name: Cisco Switch | Configurable backup path
-  cisco.ios.ios_config:
+      delegate_to: swt
+      run_once: true
+    
+    - name: Cisco Switch | Configurable backup path
+      cisco.ios.ios_config:
     backup: true
     backup_options:
       filename: running-config_{{ ansible_date_time.date }}
       dir_path: /data/config/{{ inventory_hostname }}
-  ignore_errors: true
-  no_log: false
-  register: result_backup
-
-- name: Cisco Switch | Manage result file and record failed hosts
+      ignore_errors: true
+      no_log: false
+      register: result_backup
+    
+    - name: Cisco Switch | Manage result file and record failed hosts
   block:
     - name: Cisco Switch | Remove result file if exists
       ansible.builtin.file:
@@ -74,19 +74,19 @@
         line: "None"
       when: file_stat.stat.size == 0
       delegate_to: swt
-
-- name: Cisco Switch | Delete backups older than 30 days
-  ansible.builtin.find:
+    
+    - name: Cisco Switch | Delete backups older than 30 days
+      ansible.builtin.find:
     paths: "/data/config/"
     patterns: "running-config_*"
     age: "30d"
     recurse: true
-  register: old_backups
-  delegate_to: swt
-
-- name: Cisco Switch | Delete old backup files
-  ansible.builtin.file:
+      register: old_backups
+      delegate_to: swt
+    
+    - name: Cisco Switch | Delete old backup files
+      ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
-  with_items: "{{ old_backups.files }}"
-  delegate_to: swt
+      with_items: "{{ old_backups.files }}"
+      delegate_to: swt
