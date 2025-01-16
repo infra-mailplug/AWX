@@ -1,6 +1,6 @@
 ---
 - name: Cisco
-  hosts: switch
+  hosts: all
   tasks:
     - name: Display group names
       debug:
