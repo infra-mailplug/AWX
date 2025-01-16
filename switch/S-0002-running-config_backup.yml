@@ -1,4 +1,7 @@
 ---
+- name: Hello World Sample
+  hosts: all
+  tasks:
 - name: Cisco Switch | Create directory
   ansible.builtin.file:
     path: "/data/config/{{ inventory_hostname }}"
