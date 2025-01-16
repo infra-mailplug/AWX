@@ -15,8 +15,8 @@
       ansible.builtin.setup:
         filter: "ansible_date_time"
         gather_subset: "!all"
-      delegate_to: swt
       run_once: true
+      delegate_to: swt
     
     - name: Configurable backup path
       cisco.ios.ios_config:
@@ -27,6 +27,7 @@
       ignore_errors: true
       no_log: false
       register: result_backup
+      delegate_to: swt
     
     - name: Manage result file and record failed hosts
       block:
@@ -34,8 +35,8 @@
           ansible.builtin.file:
             path: "/data/config/result"
             state: absent
-          delegate_to: swt
           run_once: true
+          delegate_to: swt
     
         - name: Create an empty file
           ansible.builtin.file:
@@ -44,13 +45,14 @@
             owner: root
             group: root
             mode: '0644'
-          delegate_to: swt
           run_once: true
+          delegate_to: swt
     
         - name: Check if backup file exists
           ansible.builtin.stat:
             path: "/data/config/{{ inventory_hostname }}/running-config_{{ ansible_date_time.date }}"
           register: backup_file_stat
+          delegate_to: swt
     
         - name: Record backup status in result file
           ansible.builtin.lineinfile:
