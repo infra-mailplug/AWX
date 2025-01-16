@@ -1,6 +1,6 @@
 ---
 - name: Cisco
-  hosts: Switch
+  hosts: switch
   tasks:
     - name: Cisco | Get ping response
       cisco.ios.ios_ping:
