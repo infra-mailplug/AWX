@@ -1,6 +1,6 @@
 ---
-- name: Hello World Sample
-  hosts: all
+- name: Cisco Switch
+  hosts: switch
   tasks:
     - name: Cisco Switch | Create directory
       ansible.builtin.file:
