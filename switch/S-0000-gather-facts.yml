@@ -2,15 +2,30 @@
 - hosts: all
   gather_facts: true
   tasks:
-    - name: Debug network OS
-      debug:
-        var: ansible_network_os
+    - debug:
+        var: ansible_facts
 
-    - name: Debug OS distribution
-      debug:
-        var: ansible_distribution
+    - name: Gather IOS Facts 02
+      ios_facts:
+        gather_subset: all
+      register: all_subset
 
-    - name: Debug OS version
+    - name: Print Subset All 03
       debug:
-        var: ansible_distribution_version
+        var: all_subset
 
+    - name: Gather HW
+      ios_facts:
+        gather_subset: hardware
+      register: hw
+    - name: Print HW
+      debug:
+        var: hw
+
+    - name: Gather Int
+      ios_facts:
+        gather_subset: interfaces
+      register: int
+    - name: Print Interfaces
+      debug:
+        var: int
