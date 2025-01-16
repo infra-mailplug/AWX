@@ -1,0 +1,16 @@
+---
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: Debug network OS
+      debug:
+        var: ansible_network_os
+
+    - name: Debug OS distribution
+      debug:
+        var: ansible_distribution
+
+    - name: Debug OS version
+      debug:
+        var: ansible_distribution_version
+
