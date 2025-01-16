@@ -2,7 +2,7 @@
 - name: Cisco Switch
   hosts: switch
   tasks:
-    - name: Cisco Switch | Create directory
+    - name: Create directory
       ansible.builtin.file:
         path: "/data/config/{{ inventory_hostname }}"
         owner: nobody
@@ -11,82 +11,82 @@
         state: directory
       delegate_to: swt
     
-    - name: Cisco Switch | Get ansible date/time facts
+    - name: Get ansible date/time facts
       ansible.builtin.setup:
-    filter: "ansible_date_time"
-    gather_subset: "!all"
+        filter: "ansible_date_time"
+        gather_subset: "!all"
       delegate_to: swt
       run_once: true
     
-    - name: Cisco Switch | Configurable backup path
+    - name: Configurable backup path
       cisco.ios.ios_config:
-    backup: true
-    backup_options:
-      filename: running-config_{{ ansible_date_time.date }}
-      dir_path: /data/config/{{ inventory_hostname }}
+        backup: true
+        backup_options:
+          filename: running-config_{{ ansible_date_time.date }}
+          dir_path: /data/config/{{ inventory_hostname }}
       ignore_errors: true
       no_log: false
       register: result_backup
     
-    - name: Cisco Switch | Manage result file and record failed hosts
-  block:
-    - name: Cisco Switch | Remove result file if exists
-      ansible.builtin.file:
-        path: "/data/config/result"
-        state: absent
-      delegate_to: swt
-      run_once: true
-
-    - name: Cisco Switch | Create an empty file
-      ansible.builtin.file:
-        path: "/data/config/result"
-        state: touch
-        owner: root
-        group: root
-        mode: '0644'
-      delegate_to: swt
-      run_once: true
-
-    - name: Cisco Switch | Check if backup file exists
-      ansible.builtin.stat:
-        path: "/data/config/{{ inventory_hostname }}/running-config_{{ ansible_date_time.date }}"
-      register: backup_file_stat
-
-    - name: Cisco Switch | Record backup status in result file
-      ansible.builtin.lineinfile:
-        path: "/data/config/result"
-        line: "{{ inventory_hostname }}"
-      delegate_to: swt
-      when:
-        - result_backup.failed
-        - not backup_file_stat.stat.exists
-      throttle: 1
-
-    - name: Cisco Switch | Get file size
-      ansible.builtin.stat:
-        path: "/data/config/result"
-      register: file_stat
-      delegate_to: swt
-
-    - name: Cisco Switch | Add "None" if file size is 0
-      ansible.builtin.lineinfile:
-        path: "/data/config/result"
-        line: "None"
-      when: file_stat.stat.size == 0
-      delegate_to: swt
+    - name: Manage result file and record failed hosts
+      block:
+        - name: Remove result file if exists
+          ansible.builtin.file:
+            path: "/data/config/result"
+            state: absent
+          delegate_to: swt
+          run_once: true
     
-    - name: Cisco Switch | Delete backups older than 30 days
+        - name: Create an empty file
+          ansible.builtin.file:
+            path: "/data/config/result"
+            state: touch
+            owner: root
+            group: root
+            mode: '0644'
+          delegate_to: swt
+          run_once: true
+    
+        - name: Check if backup file exists
+          ansible.builtin.stat:
+            path: "/data/config/{{ inventory_hostname }}/running-config_{{ ansible_date_time.date }}"
+          register: backup_file_stat
+    
+        - name: Record backup status in result file
+          ansible.builtin.lineinfile:
+            path: "/data/config/result"
+            line: "{{ inventory_hostname }}"
+          delegate_to: swt
+          when:
+            - result_backup.failed
+            - not backup_file_stat.stat.exists
+          throttle: 1
+    
+        - name: Get file size
+          ansible.builtin.stat:
+            path: "/data/config/result"
+          register: file_stat
+          delegate_to: swt
+    
+        - name: Add "None" if file size is 0
+          ansible.builtin.lineinfile:
+            path: "/data/config/result"
+            line: "None"
+          when: file_stat.stat.size == 0
+          delegate_to: swt
+    
+    - name: Delete backups older than 30 days
       ansible.builtin.find:
-    paths: "/data/config/"
-    patterns: "running-config_*"
-    age: "30d"
-    recurse: true
+        paths: "/data/config/"
+        patterns: "running-config_*"
+        age: "30d"
+        recurse: true
       register: old_backups
       delegate_to: swt
     
-    - name: Cisco Switch | Delete old backup files
+    - name: Delete old backup files
       ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: absent
+        path: "{{ item.path }}"
+        state: absent
       with_items: "{{ old_backups.files }}"
       delegate_to: swt
