@@ -12,7 +12,7 @@
             'This is a Cisco Switch running IOS.' if ansible_network_os == 'ios'
             else 'This is a Linux server running Ubuntu.'
           }}
-      when: ansible_distribution == 'ubuntu' or ansible_network_os == 'ios' or 
+      when: ansible_network_os == 'ios' or ansible_distribution == 'ubuntu'
 
     - name: Gather IOS Facts 02
       ios_facts:
