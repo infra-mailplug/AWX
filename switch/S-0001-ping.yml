@@ -2,14 +2,14 @@
 - name: Cisco
   hosts: all
   tasks:
-    - name: Display group names
+    - name: Display inventory hostname
       debug:
-        msg: "{{ group_names }}"
+        msg: "{{ inventory_hostname }}"
     - name: Display all groups and their hosts
       debug:
         var: groups
         
-    - name: Cisco | Get ping response
+    - name: Get ping response
       cisco.ios.ios_ping:
         dest: 10.1.255.1
-      when: "'swt' not in group_names"
+      when: "'swt' not in inventory_hostname"
