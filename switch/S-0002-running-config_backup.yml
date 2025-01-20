@@ -30,6 +30,7 @@
         dest: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
         flat: true
       ignore_errors: true
+      become: yes
       delegate_to: swt
       with_items: "{{ host_list }}"
       register: result_backup
