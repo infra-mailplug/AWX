@@ -10,8 +10,8 @@
     - name: Create directory
       ansible.builtin.file:
         path: "/data/config/{{ item }}"
-        owner: nobody
-        group: nogroup
+        owner: root
+        group: root
         mode: '0755'
         state: directory
       with_items: "{{ host_list }}"
