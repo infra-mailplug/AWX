@@ -21,10 +21,12 @@
     - name: Configurable backup path
       ansible.builtin.fetch:
         src: running-config
-        dest: /data/config/{{ inventory_hostname }}/running-config_{{ ansible_date_time.date }}
+        dest: /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}
         flat: true
       ignore_errors: true
       delegate_to: swt
+      with_items:
+        - ac-in-A05
     
     - name: Manage result file and record failed hosts
       block:
