@@ -19,14 +19,11 @@
       delegate_to: swt
     
     - name: Configurable backup path
-      cisco.ios.ios_config:
-        backup: true
-        backup_options:
-          filename: running-config_{{ ansible_date_time.date }}
-          dir_path: /data/config/{{ inventory_hostname }}
+      ansible.builtin.fetch:
+        src: running-config
+        dest: /data/config/{{ inventory_hostname }}/running-config_{{ ansible_date_time.date }}
+        flat: true
       ignore_errors: true
-      no_log: false
-      register: result_backup
       delegate_to: swt
     
     - name: Manage result file and record failed hosts
