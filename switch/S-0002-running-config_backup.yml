@@ -1,12 +1,12 @@
 ---
-- name: Cisco Switch
+- name: Cisco | 
   hosts: all
   tasks:
     - name: Create variable
       ansible.builtin.set_fact:
         host_list:
           - ac-in-A05
-          
+
     - name: Create directory
       ansible.builtin.file:
         path: "/data/config/{{ item }}"
@@ -17,84 +17,84 @@
       with_items: "{{ host_list }}"
       delegate_to: swt
     
-    - name: Get ansible date/time facts
-      ansible.builtin.setup:
-        filter: "ansible_date_time"
-        gather_subset: "!all"
-      run_once: true
-      delegate_to: swt
+    # - name: Get ansible date/time facts
+    #   ansible.builtin.setup:
+    #     filter: "ansible_date_time"
+    #     gather_subset: "!all"
+    #   run_once: true
+    #   delegate_to: swt
     
-    - name: Configurable backup path
-      ansible.builtin.fetch:
-        src: running-config
-        dest: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
-        flat: true
-      ignore_errors: true
-      delegate_to: swt
-      with_items: "{{ host_list }}"
+    # - name: Configurable backup path
+    #   ansible.builtin.fetch:
+    #     src: running-config
+    #     dest: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
+    #     flat: true
+    #   ignore_errors: true
+    #   delegate_to: swt
+    #   with_items: "{{ host_list }}"
     
-    - name: Manage result file and record failed hosts
-      block:
-        - name: Remove result file if exists
-          ansible.builtin.file:
-            path: "/data/config/result"
-            state: absent
-          run_once: true
-          delegate_to: swt
+    # - name: Manage result file and record failed hosts
+    #   block:
+    #     - name: Remove result file if exists
+    #       ansible.builtin.file:
+    #         path: "/data/config/result"
+    #         state: absent
+    #       run_once: true
+    #       delegate_to: swt
     
-        - name: Create an empty file
-          ansible.builtin.file:
-            path: "/data/config/result"
-            state: touch
-            owner: root
-            group: root
-            mode: '0644'
-          run_once: true
-          delegate_to: swt
+    #     - name: Create an empty file
+    #       ansible.builtin.file:
+    #         path: "/data/config/result"
+    #         state: touch
+    #         owner: root
+    #         group: root
+    #         mode: '0644'
+    #       run_once: true
+    #       delegate_to: swt
     
-        - name: Check if backup file exists
-          ansible.builtin.stat:
-            path: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
-          register: backup_file_stat
-          delegate_to: swt
-          with_items: "{{ host_list }}"
+    #     - name: Check if backup file exists
+    #       ansible.builtin.stat:
+    #         path: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
+    #       register: backup_file_stat
+    #       delegate_to: swt
+    #       with_items: "{{ host_list }}"
     
-        - name: Record backup status in result file
-          ansible.builtin.lineinfile:
-            path: "/data/config/result"
-            line: "{{ item }}"
-          delegate_to: swt
-          with_items: "{{ host_list }}"
-          when:
-            - result_backup.failed
-            - not backup_file_stat.stat.exists
-          throttle: 1
+    #     - name: Record backup status in result file
+    #       ansible.builtin.lineinfile:
+    #         path: "/data/config/result"
+    #         line: "{{ item }}"
+    #       delegate_to: swt
+    #       with_items: "{{ host_list }}"
+    #       when:
+    #         - result_backup.failed
+    #         - not backup_file_stat.stat.exists
+    #       throttle: 1
     
-        - name: Get file size
-          ansible.builtin.stat:
-            path: "/data/config/result"
-          register: file_stat
-          delegate_to: swt
+    #     - name: Get file size
+    #       ansible.builtin.stat:
+    #         path: "/data/config/result"
+    #       register: file_stat
+    #       delegate_to: swt
     
-        - name: Add "None" if file size is 0
-          ansible.builtin.lineinfile:
-            path: "/data/config/result"
-            line: "None"
-          when: file_stat.stat.size == 0
-          delegate_to: swt
+    #     - name: Add "None" if file size is 0
+    #       ansible.builtin.lineinfile:
+    #         path: "/data/config/result"
+    #         line: "None"
+    #       when: file_stat.stat.size == 0
+    #       delegate_to: swt
     
-    - name: Delete backups older than 30 days
-      ansible.builtin.find:
-        paths: "/data/config/"
-        patterns: "running-config_*"
-        age: "30d"
-        recurse: true
-      register: old_backups
-      delegate_to: swt
+    # - name: Delete backups older than 30 days
+    #   ansible.builtin.find:
+    #     paths: "/data/config/"
+    #     patterns: "running-config_*"
+    #     age: "30d"
+    #     recurse: true
+    #   register: old_backups
+    #   delegate_to: swt
     
-    - name: Delete old backup files
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: absent
-      with_items: "{{ old_backups.files }}"
-      delegate_to: swt
+    # - name: Delete old backup files
+    #   ansible.builtin.file:
+    #     path: "{{ item.path }}"
+    #     state: absent
+    #   with_items: "{{ old_backups.files }}"
+    #   delegate_to: swt
