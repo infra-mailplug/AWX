@@ -10,9 +10,9 @@
     - name: Create directory
       ansible.builtin.file:
         path: "/data/config/{{ item }}"
-        owner: root
-        group: root
-        mode: '0755'
+        # owner: root
+        # group: root
+        # mode: '0755'
         state: directory
       with_items: "{{ host_list }}"
       delegate_to: swt
@@ -48,9 +48,9 @@
           ansible.builtin.file:
             path: "/data/config/result"
             state: touch
-            owner: root
-            group: root
-            mode: '0644'
+            # owner: root
+            # group: root
+            # mode: '0644'
           run_once: true
           delegate_to: swt
     
