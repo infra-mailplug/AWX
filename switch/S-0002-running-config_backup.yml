@@ -5,7 +5,7 @@
     - name: Create variable
       ansible.builtin.set_fact:
         host_list:
-          - ac-in-A05
+          - "ac-in-A05"
 
     - name: Create directory
       ansible.builtin.file:
