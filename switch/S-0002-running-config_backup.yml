@@ -1,13 +1,13 @@
 ---
-- name: Cisco | 
+- name: Cisco
   hosts: all
   tasks:
-    - name: Create variable
+    - name: Cisco | Create variable
       ansible.builtin.set_fact:
         host_list:
           - "ac-in-A05"
 
-    - name: Create directory
+    - name: Cisco | Create directory
       ansible.builtin.file:
         path: "/data/config/{{ item }}"
         owner: nobody
