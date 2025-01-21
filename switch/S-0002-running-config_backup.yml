@@ -1,6 +1,7 @@
 ---
 - name: Cisco
   hosts: all
+  gather_facts: false
   tasks:
     - name: Create variable
       ansible.builtin.set_fact:
