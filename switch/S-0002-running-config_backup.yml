@@ -25,15 +25,24 @@
       delegate_to: swt
     
     - name: Configurable backup path
-      ansible.builtin.fetch:
-        src: running-config
-        dest: "/tmp/running-config_{{ item }}"
-        flat: true
+      ansible.builtin.shell: |
+        scp running-config \
+        /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}
       ignore_errors: true
       with_items: "{{ host_list }}"
       register: result_backup
       delegate_to: swt
 
+    # - name: Configurable backup path
+    #   ansible.builtin.fetch:
+    #     src: running-config
+    #     dest: "/tmp/running-config_{{ item }}"
+    #     flat: true
+    #   ignore_errors: true
+    #   with_items: "{{ host_list }}"
+    #   register: result_backup
+    #   delegate_to: swt
+      
     # - name: Configurable backup move
     #   ansible.builtin.command:
     #     cmd: "mv /tmp/running-config_{{ item }} /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
