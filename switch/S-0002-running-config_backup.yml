@@ -12,8 +12,8 @@
           - ac-in-A05
           - ac-in-A06-IPMI
           - ac-in-A07
-          - ac-in-A08
-          - ac-in-A08-IPMI
+          # - ac-in-A08
+          # - ac-in-A08-IPMI
           - ac-in-A09
           - ac-in-A10
           - ac-in-B01
