@@ -69,7 +69,7 @@
     
     - name: Configurable backup path
       ansible.builtin.shell: |
-        scp running-config \
+        scp {{ item }}:running-config \
         /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}
       ignore_errors: true
       with_items: "{{ host_list }}"
