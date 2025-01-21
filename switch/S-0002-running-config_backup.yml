@@ -5,7 +5,48 @@
     - name: Create variable
       ansible.builtin.set_fact:
         host_list:
+          - ac-in-A01
+          - ac-in-A02
+          - ac-in-A02-IPMI
+          - ac-in-A03
           - ac-in-A05
+          - ac-in-A06-IPMI
+          - ac-in-A07
+          - ac-in-A08
+          - ac-in-A08-IPMI
+          - ac-in-A09
+          - ac-in-A10
+          - ac-in-B01
+          - ac-in-B02
+          - ac-in-B02-IPMI
+          - ac-in-B03
+          - ac-in-B04
+          - ac-in-B04-IPMI
+          - ac-in-B05a
+          - ac-in-B05b
+          - ac-in-B06
+          - ac-in-B06-IPMI
+          - ac-in-B07
+          - ac-in-B08
+          - ac-in-V9-IPMI
+          - ac-pub-A01
+          - ac-pub-A02
+          - ac-pub-A03
+          - ac-pub-A05
+          - ac-pub-A07
+          - ac-pub-A10
+          - ac-pub-B01
+          - ac-pub-B02
+          - ac-pub-B03
+          - ac-pub-B04
+          - ac-pub-B05
+          - ac-pub-B06
+          - ac-pub-B07
+          - ac-pub-B08
+          - ac-pubin-A04
+          - ac-pubin-A08
+          - ac-pubin-V9
+          - ac-pubin-V9-IPMI
 
     - name: Create directory
       ansible.builtin.file:
@@ -32,22 +73,6 @@
       with_items: "{{ host_list }}"
       register: result_backup
       delegate_to: swt
-
-    # - name: Configurable backup path
-    #   ansible.builtin.fetch:
-    #     src: running-config
-    #     dest: "/tmp/running-config_{{ item }}"
-    #     flat: true
-    #   ignore_errors: true
-    #   with_items: "{{ host_list }}"
-    #   register: result_backup
-    #   delegate_to: swt
-      
-    # - name: Configurable backup move
-    #   ansible.builtin.command:
-    #     cmd: "mv /tmp/running-config_{{ item }} /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
-    #   with_items: "{{ host_list }}"  
-    #   delegate_to: swt
 
     - name: Manage result file and record failed hosts
       block:
