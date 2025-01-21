@@ -37,6 +37,7 @@
     - name: Configurable backup path
       ansible.builtin.command:
         cmd: mv /tmp/running-config_{{ item }} /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}
+      with_items: "{{ host_list }}"  
       delegate_to: swt
 
     - name: Manage result file and record failed hosts
