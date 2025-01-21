@@ -68,7 +68,7 @@
     
     - name: Configurable backup path
       ansible.builtin.shell: |
-        scp -o ConnectTimeout=10 running-config \
+        scp -o ConnectTimeout=10 {{ item }}:running-config \
         /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}
       ignore_errors: true
       with_items: "{{ host_list }}"
