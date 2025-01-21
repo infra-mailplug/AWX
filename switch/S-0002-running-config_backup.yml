@@ -12,8 +12,6 @@
           - ac-in-A05
           - ac-in-A06-IPMI
           - ac-in-A07
-          # - ac-in-A08
-          # - ac-in-A08-IPMI
           - ac-in-A09
           - ac-in-A10
           - ac-in-B01
@@ -37,10 +35,6 @@
           - ac-pub-A07
           - ac-pub-A10
           - ac-pub-B01
-          # - ac-pub-B02
-          # - ac-pub-B03
-          # - ac-pub-B04
-          # - ac-pub-B05
           - ac-pub-B06
           - ac-pub-B07
           - ac-pub-B08
