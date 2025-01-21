@@ -68,12 +68,14 @@
     
     - name: Configurable backup path
       ansible.builtin.shell: |
-        scp {{ item }}:running-config \
+        scp -o ConnectTimeout=10 running-config \
         /data/config/{{ item }}/running-config_{{ ansible_date_time.date }}
       ignore_errors: true
       with_items: "{{ host_list }}"
       register: result_backup
       delegate_to: swt
+      retries: 3
+      delay: 5
 
     - name: Manage result file and record failed hosts
       block:
