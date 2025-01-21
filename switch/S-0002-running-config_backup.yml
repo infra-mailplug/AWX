@@ -27,8 +27,8 @@
     - name: Configurable backup path
       ansible.builtin.fetch:
         src: running-config
-        # dest: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
-        dest: "/tmp/running-config_{{ ansible_date_time.date }}"
+        dest: "/data/config/{{ item }}/running-config_{{ ansible_date_time.date }}"
+        # dest: "/tmp/running-config_{{ ansible_date_time.date }}"
         flat: true
       ignore_errors: true
       with_items: "{{ host_list }}"
