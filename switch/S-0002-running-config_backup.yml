@@ -8,7 +8,7 @@
           - ac-in-A01
           - ac-in-A02
           - ac-in-A02-IPMI
-          - ac-in-A03
+          # - ac-in-A03
           - ac-in-A05
           - ac-in-A06-IPMI
           - ac-in-A07
@@ -46,8 +46,6 @@
           - ac-pubin-A04
           - ac-pubin-A08
           - ac-pubin-V9
-          # - ac-in-A05
-          # - ac-in-A06-IPMI
           
     - name: Create directory
       ansible.builtin.file:
